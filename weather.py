@@ -5,10 +5,8 @@ import requests
 from PIL import ImageTk, Image
 
 
-
 def img_d(descrip):
     images = ["c:\Gui\cloudy_sun.png", "c:\Gui\sun.png", "c:\Gui\\rain.png"]
-
 
     if "rain" in descrip:
         return images[2]
@@ -18,10 +16,13 @@ def img_d(descrip):
         return images[0]
     else:
         return images[0]
+
+
 def info():
     city = "Kreuzlingen"
 
-    url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(city)
+    url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(
+        city)
 
     res = requests.get(url)
 
@@ -43,8 +44,7 @@ def weather(para):
     root.title("Weather Frog")
     root.iconbitmap("c:\Gui\snowstorm.ico")
 
-
-    #images
+    # images
     image_loc = img_d(para[2])
     image_desc = ImageTk.PhotoImage(Image.open(image_loc))
 
@@ -54,7 +54,7 @@ def weather(para):
     frame_t = LabelFrame(root, text="Temperature", padx=25, relief=RIDGE)
     frame_t.grid(row=1, column=1)
 
-    frame_d = LabelFrame(root, text="Description", padx=20, cursor="circle", relief = RIDGE)
+    frame_d = LabelFrame(root, text="Description", padx=20, cursor="circle", relief=RIDGE)
     frame_d.grid(row=2, column=1)
     # color grading for negative and positive temperature
     if float(para[1]) >= 0:
@@ -66,12 +66,12 @@ def weather(para):
 
     # Weather description Label
 
-    descLabel = Label(frame_d, text=para[2],)
+    descLabel = Label(frame_d, text=para[2], )
     descLabel.pack()
 
-    #Image to description
+    # Image to description
 
-    imageL= Label(image=image_desc)
+    imageL = Label(image=image_desc)
     imageL.grid(row=2, column=2)
 
     # Button Exit
