@@ -36,6 +36,14 @@ def info():
 
     return result, temp, desc
 
+def color_grad(temp_num):
+    if temp_num > 10:
+        return "#E62600"
+    elif temp_num >0:
+        return "#FF8C00"
+    else:
+        return "#0055FF"
+
 
 # pprint(data)
 def weather(para):
@@ -59,19 +67,20 @@ def weather(para):
     myLabel_t = Label(root, text=para[0])
     myLabel_t.grid(row=0, column=0, columnspan=3)
 
-    # Framing for Temp
+    # Creating and packing frames
     frame_t = LabelFrame(root, text="Temperature", padx=25, relief=RIDGE)
     frame_t.grid(row=1, column=1)
 
     frame_d = LabelFrame(root, text="Description", padx=20, cursor="circle", relief=RIDGE)
     frame_d.grid(row=2, column=1)
+
     # color grading for negative and positive temperature
-    if float(para[1]) >= 0:
-        myLabel = Label(frame_t, text=para[1] + "°C", fg="#FF8C00", )
-        myLabel.pack()
-    else:
-        myLabel = Label(frame_t, text=para[1] + "°C", fg="blue")
-        myLabel.pack()
+    clr = color_grad(float(para[1]))
+
+    # Defining and Packing Temperature number in Frame
+    myLabel = Label(frame_t, text=para[1] + "°C", fg=clr, )
+    myLabel.pack()
+
 
     # Weather description Label
     desc_l = para[2].split()
