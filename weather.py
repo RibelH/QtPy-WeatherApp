@@ -41,15 +41,24 @@ def info():
 def weather(para):
     print(para)
     root = Tk()
-    root.title("Weather Frog")
+    root.title("Weather")
     root.iconbitmap("c:\Gui\snowstorm.ico")
+    root.geometry("230x150")
 
     # images
     image_loc = img_d(para[2])
     image_desc = ImageTk.PhotoImage(Image.open(image_loc))
 
+    #Title Font
+    # T =  Text(root)
+    # T.configure(font=("Arial", 12, "bold", "italic"))
+    # T.grid(row=0, column=0, columnspan=3)
+    # T.insert(END, para[0])
+
+    #Title
     myLabel_t = Label(root, text=para[0])
     myLabel_t.grid(row=0, column=0, columnspan=3)
+
     # Framing for Temp
     frame_t = LabelFrame(root, text="Temperature", padx=25, relief=RIDGE)
     frame_t.grid(row=1, column=1)
@@ -65,14 +74,21 @@ def weather(para):
         myLabel.pack()
 
     # Weather description Label
+    desc_l = para[2].split()
+    new_desc=""
+    desc_l[0] = desc_l[0].capitalize()
 
-    descLabel = Label(frame_d, text=para[2], )
+    for word in desc_l:
+        new_desc = new_desc + " "+ word
+
+
+    descLabel = Label(frame_d, text=new_desc, )
     descLabel.pack()
 
     # Image to description
 
     imageL = Label(image=image_desc)
-    imageL.grid(row=2, column=2)
+    imageL.grid(row=1, column=2, rowspan=2)
 
     # Button Exit
     ExButton = Button(root, text="Close", command=root.quit)
