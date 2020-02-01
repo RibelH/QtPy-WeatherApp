@@ -4,14 +4,24 @@ from tkinter import *
 import requests
 from PIL import ImageTk, Image
 
-images = []
 
 
+def img_d(descrip):
+    images = ["c:\Gui\cloudy_sun.png", "c:\Gui\sun.png", "c:\Gui\\rain.png"]
+
+
+    if "rain" in descrip:
+        return images[2]
+    elif "clear sky" in descrip:
+        return images[1]
+    elif "cloud" in descrip:
+        return images[0]
+    else:
+        return images[0]
 def info():
     city = "Kreuzlingen"
 
-    url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(
-        city)
+    url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(city)
 
     res = requests.get(url)
 
@@ -35,7 +45,8 @@ def weather(para):
 
 
     #images
-    image_desc = ImageTk.PhotoImage(Image.open("c:\Gui\weather.png"))
+    image_loc = img_d(para[2])
+    image_desc = ImageTk.PhotoImage(Image.open(image_loc))
 
     myLabel_t = Label(root, text=para[0])
     myLabel_t.grid(row=0, column=0, columnspan=3)
@@ -54,10 +65,12 @@ def weather(para):
         myLabel.pack()
 
     # Weather description Label
+
     descLabel = Label(frame_d, text=para[2],)
     descLabel.pack()
 
     #Image to description
+
     imageL= Label(image=image_desc)
     imageL.grid(row=2, column=2)
 
