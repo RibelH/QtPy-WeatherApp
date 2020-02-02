@@ -5,7 +5,16 @@ import requests
 from PIL import ImageTk, Image
 
 
+def refresh(r):
+    r.destroy()
+    weather(info())
+
+
+
+
+
 def img_d(descrip):
+
     images = ["c:\Gui\cloudy_sun.png", "c:\Gui\sun.png", "c:\Gui\\rain.png"]
 
     if "rain" in descrip:
@@ -17,7 +26,7 @@ def img_d(descrip):
     else:
         return images[0]
 
-
+#Get Weather information of Kreuzlingen
 def info():
     city = "Kreuzlingen"
 
@@ -36,6 +45,7 @@ def info():
 
     return result, temp, desc
 
+#Color Function for Temperature
 def color_grad(temp_num):
     if temp_num > 10:
         return "#E62600"
@@ -98,6 +108,10 @@ def weather(para):
 
     imageL = Label(image=image_desc)
     imageL.grid(row=1, column=2, rowspan=2)
+
+    #Button refresh
+    ReButton = Button(root, text="Refresh", command=lambda: refresh(root))
+    ReButton.grid(row=3, column=2)
 
     # Button Exit
     ExButton = Button(root, text="Close", command=root.quit)
