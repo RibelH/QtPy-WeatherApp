@@ -1,6 +1,4 @@
-from pprint import pprint
 from tkinter import *
-
 import requests
 from PIL import ImageTk, Image
 
@@ -8,6 +6,8 @@ from PIL import ImageTk, Image
 def refresh(r):
     r.destroy()
     weather(info())
+    pass
+    #TODO: Make only label refresh
 
 
 
@@ -41,7 +41,7 @@ def info():
     desc = data["weather"][0]["description"]
 
     result = "Die Temperatur in {} beträgt:\n".format(city) + (28 + len(city)) * "-"
-    pprint(data)
+    
 
     return result, temp, desc
 
@@ -55,9 +55,9 @@ def color_grad(temp_num):
         return "#0055FF"
 
 
-# pprint(data)
+
 def weather(para):
-    print(para)
+    #Root declaration
     root = Tk()
     root.title("Weather")
     root.iconbitmap("c:\Gui\snowstorm.ico")
