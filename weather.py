@@ -62,6 +62,7 @@ def weather(para):
     root.title("Weather")
     root.iconbitmap("c:\Gui\snowstorm.ico")
     root.geometry("230x150")
+    root.resizable(width=False, height= False)
 
     # images
     image_loc = img_d(para[2])
