@@ -14,14 +14,28 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("QtPyWeather")
         self.setWindowIcon(QtGui.QIcon("C:/Users/Robert/Pictures/weather.png"))
 
+        #Label creation
         label = QLabel("Weather")
-
-
-
-
         label.setAlignment(Qt.AlignCenter)
-
         self.setCentralWidget(label)
+
+        #Toolbar creation
+        toolbar = QToolBar("My main toolbar")
+        toolbar.setIconSize(QSize(16,16))
+        self.addToolBar(toolbar)
+
+        #Button creation
+        button_action = QAction(QIcon("bug.png"),"My button", self)
+        button_action.setStatusTip("This is my button")
+        button_action.triggered.connect(self.onMyToolBarButtonClick)
+        button_action.setCheckable(True)
+        toolbar.addAction(button_action)
+
+        self.setStatusBar(QStatusBar(self))
+
+    def onMyToolBarButtonClick(self,s):
+        print("click",s)
+
 
 app = QApplication(sys.argv)
 
