@@ -19,9 +19,18 @@ class MainWindow(QMainWindow):
         #Label creation
         #TODO: Temperatur Anzeige mit Farbe
         label = QLabel(list[0]+"°C")
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.setCentralWidget(label)
         label.setStyleSheet("color:blue; font-size:14px")
+
+        #Label Description creation
+        desc_label = QLabel(list[1])
+        desc_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.setCentralWidget(desc_label)
+        desc_label.setStyleSheet("color: blue")
+
+
+
 
         #Toolbar creation
         toolbar = QToolBar("My main toolbar")
@@ -34,11 +43,44 @@ class MainWindow(QMainWindow):
         button_action.triggered.connect(lambda: self.onMyToolBarButtonClick("Hallo"))
         button_action.setCheckable(True)
         toolbar.addAction(button_action)
-        #TODO: Refresh Button for new Temperature
+
+        #Separtor creation
+        toolbar.addSeparator()
+
+        #Button2 creation
+        # TODO: Refresh Button for new Temperature
+        button_action2 = QAction(QIcon("C:/Gui/arrow-circle-double"), "My button2", self)
+        button_action2.setStatusTip("just refreshed")
+        button_action2.triggered.connect(lambda: self.onMyToolBarButtonClick("Refresh"))
+        button_action2.setCheckable(True)
+        toolbar.addAction(button_action2)
+
+        toolbar.addSeparator()
+
+        toolbar.addWidget(QLabel("Hello"))
+        toolbar.addWidget(QCheckBox())
+
         self.setStatusBar(QStatusBar(self))
+
+        #Menu creation
+        menu = self.menuBar()
+
+        file_menu = menu.addMenu("&File")
+        file_menu.addAction(button_action)
+        file_menu.addSeparator()
+
+        file_submenu = file_menu.addMenu("Submenu")
+        file_submenu.addAction(button_action2)
+
+
+
 
     def onMyToolBarButtonClick(self,s):
         print("click",s)
+
+    def contextMenuEvent(self, event):
+        print("Context menu event!")
+        super(MainWindow, self).contextMenuEvent(event)
 
     def info(self):
 
