@@ -15,6 +15,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("QtPyWeather")
         self.setWindowIcon(QtGui.QIcon("C:/Users/Robert/Pictures/weather.png"))
         list = self.info()
+        #Resizing window
+        self.resize(200,200)
 
         #Label creation
         #TODO: Temperatur Anzeige mit Farbe
@@ -26,8 +28,21 @@ class MainWindow(QMainWindow):
         #Label Description creation
         desc_label = QLabel(list[1])
         desc_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.setCentralWidget(desc_label)
+        #self.setCentralWidget(desc_label)
         desc_label.setStyleSheet("color: blue")
+
+        #Layout Creation
+        layout = QVBoxLayout()
+
+        #Add Widget to Layout
+        layout.addWidget(label)
+        layout.addWidget(desc_label)
+
+
+        #Set layout for widget to show in Window
+        widget = QLabel()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
 
 
 
