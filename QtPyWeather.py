@@ -16,35 +16,36 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QtGui.QIcon("C:/Users/Robert/Pictures/weather.png"))
         list = self.info()
         #Resizing window
-        self.resize(200,200)
+        self.resize(400,200)
 
+
+        #Label Title creation
+        label_t = QLabel(list[2])
+        label_t.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        label_t.setStyleSheet("font-size:20px")
         #Label creation
         #TODO: Temperatur Anzeige mit Farbe
         label = QLabel(list[0]+"°C")
         label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.setCentralWidget(label)
-        label.setStyleSheet("color:blue; font-size:14px")
-
+        label.setStyleSheet("color:black; font-size:20px; background-color:white")
         #Label Description creation
         desc_label = QLabel(list[1])
         desc_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         #self.setCentralWidget(desc_label)
-        desc_label.setStyleSheet("color: blue")
+        desc_label.setStyleSheet("color: white; background-color:black; font-size:20px")
+
 
         #Layout Creation
         layout = QVBoxLayout()
-
         #Add Widget to Layout
+        layout.addWidget(label_t)
         layout.addWidget(label)
         layout.addWidget(desc_label)
-
-
         #Set layout for widget to show in Window
         widget = QLabel()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-
-
 
 
         #Toolbar creation
@@ -52,16 +53,15 @@ class MainWindow(QMainWindow):
         toolbar.setIconSize(QSize(16,16))
         self.addToolBar(toolbar)
 
+
         #Button creation
         button_action = QAction(QIcon("bug.png"),"My button", self)
         button_action.setStatusTip("This is my button")
         button_action.triggered.connect(lambda: self.onMyToolBarButtonClick("Hallo"))
         button_action.setCheckable(True)
         toolbar.addAction(button_action)
-
         #Separtor creation
         toolbar.addSeparator()
-
         #Button2 creation
         # TODO: Refresh Button for new Temperature
         button_action2 = QAction(QIcon("C:/Gui/arrow-circle-double"), "My button2", self)
@@ -69,13 +69,14 @@ class MainWindow(QMainWindow):
         button_action2.triggered.connect(lambda: self.onMyToolBarButtonClick("Refresh"))
         button_action2.setCheckable(True)
         toolbar.addAction(button_action2)
-
+        #Speparator
         toolbar.addSeparator()
-
+        #Adding Widget to Toolbar
         toolbar.addWidget(QLabel("Hello"))
         toolbar.addWidget(QCheckBox())
 
         self.setStatusBar(QStatusBar(self))
+
 
         #Menu creation
         menu = self.menuBar()
@@ -109,7 +110,7 @@ class MainWindow(QMainWindow):
         #Store weather Data
         temp = str(data["main"]["temp"])
         desc = data["weather"][0]["description"]
-        result = "Die Temperatur in {} beträgt:\n".format(city) + (28 + len(city)) * "-"
+        result = "Die Temperatur in {} beträgt:\n".format(city)
 
         return temp, desc, result
 
