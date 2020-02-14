@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("QtPyWeather")
         self.setWindowIcon(QtGui.QIcon("C:/Users/Robert/Pictures/weather.png"))
         list = self.info()
+
         #Resizing window
         self.resize(400,200)
 
@@ -66,7 +67,8 @@ class MainWindow(QMainWindow):
         # TODO: Refresh Button for new Temperature
         button_action2 = QAction(QIcon("C:/Gui/arrow-circle-double"), "My button2", self)
         button_action2.setStatusTip("just refreshed")
-        button_action2.triggered.connect(lambda: self.onMyToolBarButtonClick("Refresh"))
+        button_action2.triggered.connect(lambda: label.setText(self.update_info()))
+        # button_action2.triggered.connect(lambda: self.onMyToolBarButtonClick("Refresh"))
         button_action2.setCheckable(True)
         toolbar.addAction(button_action2)
         #Speparator
@@ -89,6 +91,10 @@ class MainWindow(QMainWindow):
         file_submenu.addAction(button_action2)
 
 
+    def update_info(self):
+        l = self.info()
+        new_info = l[0]+"°C"
+        return new_info
 
 
     def onMyToolBarButtonClick(self,s):

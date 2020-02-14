@@ -120,4 +120,4 @@ def weather(para):
     root.mainloop()
 
 
-weather(info())
+
