@@ -66,10 +66,9 @@ class MainWindow(QMainWindow):
         #Button2 creation
         # TODO: Refresh Button for new Temperature
         button_action2 = QAction(QIcon("C:/Gui/arrow-circle-double"), "My button2", self)
-        button_action2.setStatusTip("just refreshed")
-        button_action2.triggered.connect(lambda: label.setText(self.update_info()))
-        # button_action2.triggered.connect(lambda: self.onMyToolBarButtonClick("Refresh"))
-        button_action2.setCheckable(True)
+        button_action2.setStatusTip("Refresh?")
+        button_action2.triggered.connect(lambda: label.setText(self.update_temp()))
+        button_action2.setCheckable(False)
         toolbar.addAction(button_action2)
         #Speparator
         toolbar.addSeparator()
@@ -91,9 +90,14 @@ class MainWindow(QMainWindow):
         file_submenu.addAction(button_action2)
 
 
-    def update_info(self):
+    def update_temp(self):
         l = self.info()
         new_info = l[0]+"°C"
+        return new_info
+
+    def update_desc(self):
+        l = self.info()
+        new_info = l[1]
         return new_info
 
 
