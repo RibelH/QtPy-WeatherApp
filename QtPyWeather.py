@@ -4,6 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import requests
 import sys
+#TODO: Weather Night/Day Difference
+#TODO: Feature (Change City)
 
 
 
@@ -24,24 +26,26 @@ class MainWindow(QMainWindow):
         label_t = QLabel(list[2])
         label_t.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         label_t.setStyleSheet("font-size:20px")
+
         #Label creation
         #TODO: Temperatur Anzeige mit Farbe
         label = QLabel(list[0]+"°C")
         label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.setCentralWidget(label)
         label.setStyleSheet("color:black; font-size:20px; background-color:white")
+
         #Label Description creation
         desc_label = QLabel(list[1])
         desc_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         #self.setCentralWidget(desc_label)
         desc_label.setStyleSheet("color: white; background-color:black; font-size:20px")
 
-
         #Label Description Image
         label_img = QLabel()
         image = QPixmap(self.img_d(list[1]))
         label_img.setPixmap(image)
         label_img.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        label_img.setStyleSheet("background-color:#78ECF6")
 
 
 
@@ -78,6 +82,7 @@ class MainWindow(QMainWindow):
         button_action2 = QAction(QIcon("C:/Gui/arrow-circle-double"), "My button2", self)
         button_action2.setStatusTip("Refresh?")
         button_action2.triggered.connect(lambda: label.setText(self.update_temp()))
+        button_action2.triggered.connect(lambda: desc_label.setText(self.update_desc()))
         button_action2.setCheckable(False)
         toolbar.addAction(button_action2)
         #Speparator
