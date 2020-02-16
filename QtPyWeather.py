@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         list = self.info()
 
         #Resizing window
-        self.resize(400,200)
+        self.resize(400,400)
 
 
         #Label Title creation
@@ -37,12 +37,22 @@ class MainWindow(QMainWindow):
         desc_label.setStyleSheet("color: white; background-color:black; font-size:20px")
 
 
+        #Label Description Image
+        label_img = QLabel()
+        image = QPixmap(self.img_d(list[1]))
+        label_img.setPixmap(image)
+        label_img.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
+
+
         #Layout Creation
         layout = QVBoxLayout()
         #Add Widget to Layout
         layout.addWidget(label_t)
+        layout.addWidget(label_img)
         layout.addWidget(label)
         layout.addWidget(desc_label)
+
         #Set layout for widget to show in Window
         widget = QLabel()
         widget.setLayout(layout)
@@ -89,33 +99,46 @@ class MainWindow(QMainWindow):
         file_submenu = file_menu.addMenu("Submenu")
         file_submenu.addAction(button_action2)
 
-
+    #Functino to update Temperature
     def update_temp(self):
         l = self.info()
         new_info = l[0]+"°C"
         return new_info
 
+    #Function to update Description
     def update_desc(self):
         l = self.info()
         new_info = l[1]
         return new_info
 
-
+    #ToolBarButton Function
     def onMyToolBarButtonClick(self,s):
         print("click",s)
 
+    #ContextMenu Function
     def contextMenuEvent(self, event):
         print("Context menu event!")
         super(MainWindow, self).contextMenuEvent(event)
 
-    def info(self):
+    #Function to get Description Image
+    def img_d(self, descrip):
+        images = ["c:\Gui\cloudy_sun.png", "c:\Gui\sun.png", "c:\Gui\\rain.png"]
+        if "rain" in descrip:
+            return images[2]
+        elif "clear sky" in descrip:
+            return images[1]
+        elif "cloud" in descrip:
+            return images[0]
+        else:
+            return images[0]
 
+    #Function to get Weather Data
+    def info(self):
         #Get weather data
         city = "Kreuzlingen"
         url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(city)
         res = requests.get(url)
         data = res.json()
-
 
         #Store weather Data
         temp = str(data["main"]["temp"])
