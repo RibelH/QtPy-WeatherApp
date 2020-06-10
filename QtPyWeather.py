@@ -14,12 +14,27 @@ class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
-        self.setWindowTitle("QtPyWeather")
+        self.setWindowTitle("QtPyWeatherAPP")
         self.setWindowIcon(QtGui.QIcon("C:/Users/Robert/Pictures/weather.png"))
-        list = self.info()
+
+        #Default City
+        self.city = "Kreuzlingen"
+
+        list = self.info(self.city)
 
         #Resizing window
         self.resize(400,400)
+
+        #Button to change City
+        button_change_city = QPushButton("Change City",self)
+        button_change_city.clicked.connect(lambda:label.setText(self.update_temp(self.textbox.text())))
+        button_change_city.clicked.connect(lambda: desc_label.setText(self.update_desc(self.textbox.text())))
+        button_change_city.clicked.connect(lambda: label_t.setText(self.update_title(self.textbox.text())))
+
+        #Textbox creation
+        self.textbox = QLineEdit(self)
+        self.textbox.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.textbox.resize(280,40)
 
 
         #Label Title creation
@@ -52,10 +67,13 @@ class MainWindow(QMainWindow):
         #Layout Creation
         layout = QVBoxLayout()
         #Add Widget to Layout
+        layout.addWidget(self.textbox)
+        layout.addWidget(button_change_city)
         layout.addWidget(label_t)
         layout.addWidget(label_img)
         layout.addWidget(label)
         layout.addWidget(desc_label)
+         
 
         #Set layout for widget to show in Window
         widget = QLabel()
@@ -79,12 +97,12 @@ class MainWindow(QMainWindow):
         toolbar.addSeparator()
         #Button2 creation
         # TODO: Refresh Button for new Temperature
-        button_action2 = QAction(QIcon("C:/Gui/arrow-circle-double"), "My button2", self)
-        button_action2.setStatusTip("Refresh?")
-        button_action2.triggered.connect(lambda: label.setText(self.update_temp()))
-        button_action2.triggered.connect(lambda: desc_label.setText(self.update_desc()))
-        button_action2.setCheckable(False)
-        toolbar.addAction(button_action2)
+        Refresh_button = QAction(QIcon("C:/Gui/arrow-circle-double"), "Refresh Stats", self)
+        Refresh_button.setStatusTip("Refresh?")
+        Refresh_button.triggered.connect(lambda: label.setText(self.update_temp(self.city)))
+        Refresh_button.triggered.connect(lambda: desc_label.setText(self.update_desc(self.city)))
+        Refresh_button.setCheckable(False)
+        toolbar.addAction(Refresh_button)
         #Speparator
         toolbar.addSeparator()
         #Adding Widget to Toolbar
@@ -102,17 +120,22 @@ class MainWindow(QMainWindow):
         file_menu.addSeparator()
 
         file_submenu = file_menu.addMenu("Submenu")
-        file_submenu.addAction(button_action2)
+        file_submenu.addAction(Refresh_button)
+
+    def update_title(self, cit):
+        l = self.info(cit)
+        new_info = "Die Temperatur in {} beträgt:\n".format(cit)
+        return new_info
 
     #Functino to update Temperature
-    def update_temp(self):
-        l = self.info()
+    def update_temp(self, cit):
+        l = self.info(cit)
         new_info = l[0]+"°C"
         return new_info
 
     #Function to update Description
-    def update_desc(self):
-        l = self.info()
+    def update_desc(self, cit):
+        l = self.info(cit)
         new_info = l[1]
         return new_info
 
@@ -138,9 +161,9 @@ class MainWindow(QMainWindow):
             return images[0]
 
     #Function to get Weather Data
-    def info(self):
+    def info(self, cit):
         #Get weather data
-        city = "Kreuzlingen"
+        city = cit
         url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(city)
         res = requests.get(url)
         data = res.json()
