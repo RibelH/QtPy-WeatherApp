@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
 
     def update_title(self, cit):
         l = self.info(cit)
-        new_info = "Die Temperatur in {} beträgt:\n".format(cit)
+        new_info = l[2]
         return new_info
 
     #Functino to update Temperature
@@ -163,17 +163,32 @@ class MainWindow(QMainWindow):
     #Function to get Weather Data
     def info(self, cit):
         #Get weather data
-        city = cit
-        url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(city)
-        res = requests.get(url)
-        data = res.json()
+        try:
+            city = cit
+            url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(city)
+            res = requests.get(url)
+            data = res.json()
 
-        #Store weather Data
-        temp = str(data["main"]["temp"])
-        desc = data["weather"][0]["description"]
-        result = "Die Temperatur in {} beträgt:\n".format(city)
+            #Store weather Data
+            temp = str(data["main"]["temp"])
+            desc = data["weather"][0]["description"]
+            result = "Die Temperatur in {} beträgt:\n".format(city)
 
-        return temp, desc, result
+            return temp, desc, result
+        except KeyError:
+            city = "Kreuzlingen"
+            url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(
+                city)
+            res = requests.get(url)
+            data = res.json()
+
+            # Store weather Data
+            temp = str(data["main"]["temp"])
+            desc = data["weather"][0]["description"]
+            result = "Die Temperatur in {} beträgt:\n".format(city)
+
+            return temp, desc, result
+
 
 
 app = QApplication(sys.argv)
