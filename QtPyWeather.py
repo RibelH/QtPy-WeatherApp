@@ -5,31 +5,58 @@ from PyQt5.QtGui import *
 import requests
 import sys
 #TODO: Weather Night/Day Difference
-#TODO: Feature (Change City)
+
 
 
 
 class MainWindow(QMainWindow):
-
+    city = "1"
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-
+        global city
         self.setWindowTitle("QtPyWeatherAPP")
         self.setWindowIcon(QtGui.QIcon("C:/Users/Robert/Pictures/weather.png"))
-
+        self.stylesheet = """
+        
+        QLineEdit{
+            font-size:20px;
+            height:40px;
+            width:100px;
+        }
+        QPushButton {
+            font: bold; 
+            background-color: black; 
+            font-size:12px; 
+            height:40px;
+            width:100px; 
+            color:white;
+            border: 2px solid #646262;
+        }
+        QPushButton:hover {
+            background-color: #C0C0C0;
+            color: black;
+        }
+        QPushButton:pressed {
+            background-color: #6C6C6C;
+            color: white;
+        }
+        """
         #Default City
-        self.city = "Kreuzlingen"
+        city =""
 
-        list = self.info(self.city)
+
+        list = self.info(city)
 
         #Resizing window
-        self.resize(400,400)
+        self.resize(400,500)
 
         #Button to change City
-        button_change_city = QPushButton("Change City",self)
-        button_change_city.clicked.connect(lambda:label.setText(self.update_temp(self.textbox.text())))
-        button_change_city.clicked.connect(lambda: desc_label.setText(self.update_desc(self.textbox.text())))
-        button_change_city.clicked.connect(lambda: label_t.setText(self.update_title(self.textbox.text())))
+        self.button_change_city = QPushButton("Change City",self)
+        self.button_change_city.clicked.connect(lambda:self.label.setText(self.update_temp(self.textbox.text())))
+        self.button_change_city.clicked.connect(lambda: self.desc_label.setText(self.update_desc(self.textbox.text())))
+        self.button_change_city.clicked.connect(lambda: self.label_t.setText(self.update_title(self.textbox.text())))
+        self.button_change_city.clicked.connect(lambda: self.textbox.setText(""))
+        self.button_change_city.clicked.connect(lambda: self.update_city(self.textbox.text()))
 
         #Textbox creation
         self.textbox = QLineEdit(self)
@@ -37,30 +64,31 @@ class MainWindow(QMainWindow):
         self.textbox.resize(280,40)
 
 
-        #Label Title creation
-        label_t = QLabel(list[2])
-        label_t.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        label_t.setStyleSheet("font-size:20px")
+        #self.label Title creation
+        self.label_t = QLabel(list[2])
+        self.label_t.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        
+        self.label_t.setStyleSheet("font-size:20px; background-color:#a5f8ff")
 
-        #Label creation
+        #self.label creation
         #TODO: Temperatur Anzeige mit Farbe
-        label = QLabel(list[0]+"°C")
-        label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.setCentralWidget(label)
-        label.setStyleSheet("color:black; font-size:20px; background-color:white")
+        self.label = QLabel(list[0]+"°C")
+        self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.setCentralWidget(self.label)
+        self.label.setStyleSheet("color:black; font-size:20px; background-color:white")
 
-        #Label Description creation
-        desc_label = QLabel(list[1])
-        desc_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        #self.setCentralWidget(desc_label)
-        desc_label.setStyleSheet("color: white; background-color:black; font-size:20px")
+        #self.label Description creation
+        self.desc_label = QLabel(list[1])
+        self.desc_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.desc_label.setStyleSheet("color: white; background-color:black; font-size:20px")
 
-        #Label Description Image
-        label_img = QLabel()
+        #self.label Description Image
+        self.label_img = QLabel()
         image = QPixmap(self.img_d(list[1]))
-        label_img.setPixmap(image)
-        label_img.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        label_img.setStyleSheet("background-color:#78ECF6")
+        self.label_img.setPixmap(image)
+        self.label_img.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
+        self.label_img.setStyleSheet("background-color:#78ECF6")
 
 
 
@@ -68,11 +96,11 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
         #Add Widget to Layout
         layout.addWidget(self.textbox)
-        layout.addWidget(button_change_city)
-        layout.addWidget(label_t)
-        layout.addWidget(label_img)
-        layout.addWidget(label)
-        layout.addWidget(desc_label)
+        layout.addWidget(self.button_change_city)
+        layout.addWidget(self.label_t)
+        layout.addWidget(self.label_img)
+        layout.addWidget(self.label)
+        layout.addWidget(self.desc_label)
          
 
         #Set layout for widget to show in Window
@@ -99,8 +127,8 @@ class MainWindow(QMainWindow):
         # TODO: Refresh Button for new Temperature
         Refresh_button = QAction(QIcon("C:/Gui/arrow-circle-double"), "Refresh Stats", self)
         Refresh_button.setStatusTip("Refresh?")
-        Refresh_button.triggered.connect(lambda: label.setText(self.update_temp(self.city)))
-        Refresh_button.triggered.connect(lambda: desc_label.setText(self.update_desc(self.city)))
+        Refresh_button.triggered.connect(lambda: self.label.setText(self.update_temp(city)))
+        Refresh_button.triggered.connect(lambda: self.desc_label.setText(self.update_desc(city)))
         Refresh_button.setCheckable(False)
         toolbar.addAction(Refresh_button)
         #Speparator
@@ -122,12 +150,14 @@ class MainWindow(QMainWindow):
         file_submenu = file_menu.addMenu("Submenu")
         file_submenu.addAction(Refresh_button)
 
+        app.setStyleSheet(self.stylesheet)
+    #Function to update Title
     def update_title(self, cit):
         l = self.info(cit)
         new_info = l[2]
         return new_info
 
-    #Functino to update Temperature
+    #Function to update Temperature
     def update_temp(self, cit):
         l = self.info(cit)
         new_info = l[0]+"°C"
@@ -161,7 +191,7 @@ class MainWindow(QMainWindow):
             return images[0]
 
     #Function to get Weather Data
-    def info(self, cit):
+    def info(self, cit = "Kreuzlingen"):
         #Get weather data
         try:
             city = cit
@@ -172,10 +202,10 @@ class MainWindow(QMainWindow):
             #Store weather Data
             temp = str(data["main"]["temp"])
             desc = data["weather"][0]["description"]
-            result = "Die Temperatur in {} beträgt:\n".format(city)
+            result = "{}".format(city)
 
             return temp, desc, result
-        except KeyError:
+        except:
             city = "Kreuzlingen"
             url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=ac7c75b9937a495021393024d0a90c44&units=metric".format(
                 city)
@@ -185,9 +215,13 @@ class MainWindow(QMainWindow):
             # Store weather Data
             temp = str(data["main"]["temp"])
             desc = data["weather"][0]["description"]
-            result = "Die Temperatur in {} beträgt:\n".format(city)
+            result = "{}".format(city)
 
             return temp, desc, result
+    def update_city(self, cit):
+        global city
+        print(city)
+        city = cit
 
 
 
